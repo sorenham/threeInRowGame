@@ -123,17 +123,83 @@ public class Main {
         }
         return user_input;
     }
-    public static void main(String[] args) {
+    private static boolean askPlayAgain()
+    {
+        boolean selecting = true;
+        boolean Selection = false;
+        String user_input = "";
+        Scanner sc = new Scanner(System.in);
+        while ( selecting )
+        {
+            System.out.printf("Do yoy want to play another game ( Y / N ) ? ");
+            try
+            {
+                user_input = sc.nextLine();
+            }
+            catch (Exception e)
+            {
+                user_input = "";
+            }
+
+            if ( user_input.equals("Y") || user_input.equals( "y" ))
+            {
+                selecting = false;
+                Selection = true;
+            }
+            else if ( user_input.equals("N") || user_input.equals( "n" ))
+            {
+                selecting = false;
+                Selection = false;
+            }
+            else
+            {
+                System.out.printf("Bad choice try again!%n");
+            }
+        }
+        return Selection;
+    }
+    public static void main(String[] args)
+    {
+        Player player1;
+        Player player2;
         GameType activeGame = SelectOpponent();
         if( activeGame == GameType.player )
         {
             String player1Name = GetPlayerName( 1 );
             String player2Name = GetPlayerName( 2 );
+            player1 = new Player( player1Name, 'X' );
+            player2 = new Player( player2Name, 'O' );
         }
+        else
+        {
+            String player1Name = GetPlayerName( 1 );
+            player1 = new Player( player1Name, 'X' );
+            player2 = new Player( 'O');
+        }
+
         int GameRowSize = SelectRowSize();
         int GameColSize = SelectColSize();
         GameBoard aGameBoard = new GameBoard( GameRowSize, GameColSize );
 
-        aGameBoard.PrintBoard();
+        do
+        {
+            boolean player1Turn = true;
+            boolean WeHaveAWinner = false;
+            do
+            {
+                if ( player1Turn )
+                {
+                    aGameBoard.PlayerMove( player1 );
+                    WeHaveAWinner = aGameBoard.CheckWin( player1 );
+                }
+                else
+                {
+                    aGameBoard.PlayerMove( player2 );
+                    WeHaveAWinner = aGameBoard.CheckWin( player2 );
+                }
+                player1Turn = !player1Turn;
+                aGameBoard.PrintBoard();
+            } while( WeHaveAWinner );
+        } while ( askPlayAgain() );
     }
 }

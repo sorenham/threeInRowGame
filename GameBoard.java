@@ -52,7 +52,7 @@ public class GameBoard
             }
         }
     }
-    public boolean CheckWin(char mark)
+    public boolean CheckWin( Player aPlayer )
     {
         return true;
     }
@@ -64,6 +64,17 @@ public class GameBoard
     {
         this.board[row][col] = mark;
     }
+    public void PlayerMove( Player aPlayer )
+    {
+        if ( aPlayer.isPlayer() )
+        {
+            System.out.printf("Ok, it's %s's turn!%n" , aPlayer.getName());
+        }
+        else
+        {
+            System.out.printf("The computer is making a move!%n" );
+        }
+    }
     public void PrintBoard()
     {
         char aChar = 'X';
@@ -74,19 +85,12 @@ public class GameBoard
         }
         System.out.printf("%n");
 
-        //System.out.printf("Row1 | col2 | col3 | col |");
-        //System.out.printf("Row1 | col2 | col3 | Col ");
-        //System.out.printf("Row2 | col2 | col3 |");
-        //System.out.printf("      --------------------");
-        //System.out.printf("Row3 | col2 | col3 |");
-
         for( int row = 0; row < this.rows; row++ )
         {
             System.out.printf("Row%2d  |",row+1);
             for( int col = 0; col < this.cols; col++ )
             {
-                System.out.printf("   %C   |",aChar);
-                //this.board[row][col] = ' ';
+                System.out.printf("   %C   |", aChar );
             }
             System.out.printf("%n");
         }
