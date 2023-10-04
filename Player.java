@@ -1,8 +1,10 @@
 public class Player {
     private String name;
+
     private char token;
 
     private boolean player;
+
     private boolean computer;
 
     public Player( String name, char token )

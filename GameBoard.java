@@ -72,7 +72,7 @@ public class GameBoard
         }
         else
         {
-            System.out.printf("The computer is making a move!%n" );
+            System.out.printf("The Computer is making a move!%n" );
         }
     }
     public void PrintBoard()

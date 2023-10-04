@@ -199,6 +199,7 @@ public class Main {
                 }
                 player1Turn = !player1Turn;
                 aGameBoard.PrintBoard();
+
             } while( WeHaveAWinner );
         } while ( askPlayAgain() );
     }
