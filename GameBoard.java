@@ -56,25 +56,61 @@ public class GameBoard
     }
     private boolean isBoardFull()
     {
-        boolean HasFreePos = false;
+        boolean isFull = true;
         for( int row = 0; row < this.rows; row++)
         {
             for ( int col = 0; col < this.cols; col++ )
             {
-                if ( this.board[row][col] == ' ' ) HasFreePos = true;
+                if ( this.board[row][col] == ' ' ) isFull = false;
             }
         }
-        return HasFreePos;
+        return isFull;
     }
-    public boolean CheckWin( Player aPlayer )
+    private boolean CheckRowsForWin( char aToken )
     {
-        boolean GotAWinner = false;
-        if ( isBoardFull() )
+        boolean GotWinningRow = false;
+        for( int row = 0; row < this.rows; row++ )
         {
-            GotAWinner = true;
+            for ( int col = 0; col < this.cols - 2; col++ )
+            {
+                if ( this.board[row][col] == aToken && this.board[row][col+1] == aToken && this.board[row][col+2] == aToken) GotWinningRow = true;
+            }
         }
-
-        return GotAWinner;
+        return GotWinningRow;
+    }
+    private boolean CheckColsForWin( char aToken )
+    {
+        boolean GotWinningCol = false;
+        for( int row = 0; row < this.rows - 2; row++ )
+        {
+            for ( int col = 0; col < this.cols; col++ )
+            {
+                if ( this.board[row][col] == aToken && this.board[row+1][col] == aToken && this.board[row+2][col] == aToken) GotWinningCol = true;
+            }
+        }
+        return GotWinningCol;
+    }
+    private boolean CheckDiagForWin( char aToken )
+    {
+        boolean GotWinningDiag = false;
+        for( int row = 0; row < this.rows - 2; row++ )
+        {
+            for ( int col = 0; col < this.cols - 2; col++ )
+            {
+                if ( this.board[row][col] == aToken && this.board[row+1][col+1] == aToken && this.board[row+2][col+2] == aToken) GotWinningDiag = true;
+                if ( this.board[row+2][col] == aToken && this.board[row+1][col+1] == aToken && this.board[row][col+2] == aToken) GotWinningDiag = true;
+            }
+        }
+        return GotWinningDiag;
+    }
+    public Main.GameResult CheckWin( Player aPlayer )
+    {
+        Main.GameResult aResult = Main.GameResult.noWinner;
+        if ( isBoardFull() ) aResult = Main.GameResult.draw;
+        else if ( CheckRowsForWin( aPlayer.getToken() )) aResult = Main.GameResult.Winner;
+        else if ( CheckColsForWin( aPlayer.getToken() )) aResult = Main.GameResult.Winner;
+        else if ( CheckDiagForWin( aPlayer.getToken() )) aResult = Main.GameResult.Winner;
+        return aResult;
     }
     public boolean IsFreePosition( int row, int col )
     {

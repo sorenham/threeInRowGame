@@ -2,6 +2,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 public class Main {
     private enum GameType { player, computer }
+    public enum GameResult { Winner, draw, noWinner }
     private static GameType SelectOpponent()
     {
         Scanner sc = new Scanner(System.in);
@@ -158,11 +159,20 @@ public class Main {
         }
         return Selection;
     }
+    private static void SaluteTheWinner( Player aPlayer )
+    {
+        System.out.printf("We salute you, %s, you're a winner!%n",aPlayer.getName());
+    }
+    private static void InformDraw( )
+    {
+        System.out.printf("We Got a Draw!%n");
+    }
     public static void main(String[] args)
     {
         Player player1;
         Player player2;
         GameType activeGame = SelectOpponent();
+        GameResult aGameResult = GameResult.noWinner;
         if( activeGame == GameType.player )
         {
             String player1Name = GetPlayerName( 1 );
@@ -185,23 +195,26 @@ public class Main {
         {
             aGameBoard.ClearBoard();
             boolean player1Turn = true;
-            boolean WeHaveAWinner = false;
             do
             {
                 if ( player1Turn )
                 {
                     aGameBoard.MakeMove( player1 );
-                    WeHaveAWinner = aGameBoard.CheckWin( player1 );
+                    aGameResult = aGameBoard.CheckWin( player1 );
+                    aGameBoard.PrintBoard();
+                    if ( aGameResult == GameResult.Winner ) SaluteTheWinner( player1 );
+                    else if ( aGameResult == GameResult.draw ) InformDraw(  );
                 }
                 else
                 {
                     aGameBoard.MakeMove( player2 );
-                    WeHaveAWinner = aGameBoard.CheckWin( player2 );
+                    aGameResult = aGameBoard.CheckWin( player2 );
+                    aGameBoard.PrintBoard();
+                    if ( aGameResult == GameResult.Winner  ) SaluteTheWinner( player2 );
+                    else if ( aGameResult == GameResult.draw ) InformDraw(  );
                 }
                 player1Turn = !player1Turn;
-                aGameBoard.PrintBoard();
-
-            } while( WeHaveAWinner );
+            } while( aGameResult == GameResult.noWinner );
         } while ( askPlayAgain() );
     }
 }
