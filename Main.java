@@ -183,18 +183,19 @@ public class Main {
 
         do
         {
+            aGameBoard.ClearBoard();
             boolean player1Turn = true;
             boolean WeHaveAWinner = false;
             do
             {
                 if ( player1Turn )
                 {
-                    aGameBoard.PlayerMove( player1 );
+                    aGameBoard.MakeMove( player1 );
                     WeHaveAWinner = aGameBoard.CheckWin( player1 );
                 }
                 else
                 {
-                    aGameBoard.PlayerMove( player2 );
+                    aGameBoard.MakeMove( player2 );
                     WeHaveAWinner = aGameBoard.CheckWin( player2 );
                 }
                 player1Turn = !player1Turn;

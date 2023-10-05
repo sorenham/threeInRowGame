@@ -1,3 +1,5 @@
+import static java.lang.Math.random;
+
 public class GameBoard
 {
     private char[][] board;
@@ -46,15 +48,33 @@ public class GameBoard
     {
         for(int row = 0; row < this.rows; row++ )
         {
-            for(int col = 0; this.cols < 3; col++ )
+            for(int col = 0; col < this.cols; col++ )
             {
                 this.board[row][col] = ' ';
             }
         }
     }
+    private boolean isBoardFull()
+    {
+        boolean HasFreePos = false;
+        for( int row = 0; row < this.rows; row++)
+        {
+            for ( int col = 0; col < this.cols; col++ )
+            {
+                if ( this.board[row][col] == ' ' ) HasFreePos = true;
+            }
+        }
+        return HasFreePos;
+    }
     public boolean CheckWin( Player aPlayer )
     {
-        return true;
+        boolean GotAWinner = false;
+        if ( isBoardFull() )
+        {
+            GotAWinner = true;
+        }
+
+        return GotAWinner;
     }
     public boolean IsFreePosition( int row, int col )
     {
@@ -66,18 +86,54 @@ public class GameBoard
     }
     public void PlayerMove( Player aPlayer )
     {
+        int row;
+        int col;
+        boolean BadMove = true;
+        do
+        {
+            row = GetRandomNumber( 0 , this.rows );
+            col = GetRandomNumber( 0 , this.cols );
+            BadMove = !IsFreePosition( row, col );
+
+            System.out.printf("col = %d, row = %d, BadMove = %b%n" , row, col , BadMove);
+
+        } while ( BadMove );
+        MarkPosition( row, col, aPlayer.getToken() );
+    }
+    public void MakeMove( Player aPlayer )
+    {
         if ( aPlayer.isPlayer() )
         {
             System.out.printf("Ok, it's %s's turn!%n" , aPlayer.getName());
+            PlayerMove( aPlayer );
         }
         else
         {
             System.out.printf("The Computer is making a move!%n" );
+            ComputerMove( aPlayer );
         }
     }
+    private int GetRandomNumber(int min, int max) {
+        return (int) ((random() * (max - min)) + min);
+    }
+    private void ComputerMove( Player aPlayer )
+    {
+        int row;
+        int col;
+        boolean BadMove = true;
+        do
+        {
+            row = GetRandomNumber( 0 , this.rows );
+            col = GetRandomNumber( 0 , this.cols );
+            BadMove = !IsFreePosition( row, col );
+
+        } while ( BadMove );
+        MarkPosition( row, col, aPlayer.getToken() );
+    }
+
     public void PrintBoard()
     {
-        char aChar = 'X';
+        //char aChar = 'X';
         System.out.printf("         ");
         for( int col = 1; col <= this.cols; col++ )
         {
@@ -90,7 +146,7 @@ public class GameBoard
             System.out.printf("Row%2d  |",row+1);
             for( int col = 0; col < this.cols; col++ )
             {
-                System.out.printf("   %C   |", aChar );
+                System.out.printf("   %C   |", this.board[row][col] );
             }
             System.out.printf("%n");
         }
